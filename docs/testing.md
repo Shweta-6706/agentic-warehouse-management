@@ -1,15 +1,15 @@
 Testing Strategy:-
-Framework:
+# Framework:
 pytest
 
 Tests Implemented:
 Forecasting Tests:
-Moving average correctness
-Volatility validation
+1. Moving average correctness
+2. Volatility validation
 
 Optimization Tests:
-EOQ positive output
-Deterministic calculation
+1. EOQ positive output
+2. Deterministic calculation
 
 Why Testing Matters?
 Ensures correctness
