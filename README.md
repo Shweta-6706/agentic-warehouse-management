@@ -1,120 +1,130 @@
-Agentic Warehouse Management System
+# Agentic Warehouse Management System
 
-An intelligent warehouse management agent that processes compressed product datasets, forecasts demand, optimizes inventory levels, and generates actionable stock recommendations using decision logic and optimization techniques.
+An engineered warehouse decision-support system that forecasts demand, optimizes inventory levels, ranks SKU risk, and generates deterministic stock recommendations using classical supply chain models and structured decision logic.
 
-OVERVIEW:
-The Agentic warehouse management system is designed to simulate a real-world AI-driven inventory optimization engine used in modern supply chains.
+# Overview
+
+This project implements a modular warehouse optimization engine that simulates how modern supply chains manage inventory risk.
 
 The system:
-* Processes compressed product datasets for faster computation
-* Forecasts product demand using statistical models
-* Calculates optimal stock levels
+* Processes structured product datasets (CSV)
+* Forecasts demand using statistical methods
+* Computes Reorder Point (ROP) and Economic Order Quantity (EOQ)
 * Detects stockout and overstock risks
-* Generates intelligent reorder recommendations
-* Supports scenario-based “What-If” simulation
+* Ranks products by operational urgency
+* Supports scenario-based “what-if” simulations
+* Generates exportable priority reports
+* Includes automated unit tests
 
-This project bridges Machine Learning, optimization technique into one cohesive solution.
+The decision engine runs deterministically and does not rely on LLM outputs for stock optimization.
 
-Warehouses often face:
-* Stockouts due to inaccurate demand forecasting
-* Overstocking leading to high holding costs
-* Slow decision-making processes
+
+# Problem Statement
+
+Warehouses commonly struggle with:
+* Stockouts caused by inaccurate demand estimation
+* Overstocking leading to excessive holding costs
+* Delayed prioritization of high-risk SKUs
 * Inability to simulate supply chain disruptions
 
-This system addresses these issues through automated, data-driven decision-making.
+This system addresses these issues through structured forecasting, optimization models, and agent-based decision scoring.
 
-1. Compressed Data Processing:
-* Accepts compressed CSV/JSON datasets
-* Efficient parsing and preprocessing
-* Optimized data loading pipeline
+## Core Features
 
-2. Demand forecasting module
+# 1. Demand Forecasting Module
+Implements statistical demand analysis:
+
 * Moving Average Forecasting
-* Demand trend detection
-* Growth/decline pattern identification
+* Volatility (standard deviation) measurement
+* Demand growth rate detection
 
-3. Inventory Optimization Engine
+These metrics drive downstream optimization decisions.
+
+# 2. Inventory Optimization Engine
+
 Implements classical inventory control models:
 
-Reorder point formula:
-Reorder\ Point = (Average\ Demand × Lead\ Time) + Safety\ Stock
+Reorder Point (ROP)
+Reorder Point = (Average Demand × Lead Time) + Safety Stock
 
-Economic Order quantity (EOQ):
-EOQ = \sqrt{\frac{2DS}{H}}
+Economic Order Quantity (EOQ)
+EOQ = √(2DS / H)
 
 Where:
 * D = Annual demand
 * S = Ordering cost
 * H = Holding cost
 
-4. Agentic Decision Logic
+These formulas are implemented directly in code and validated via automated tests.
 
-The intelligent agent:
-* Evaluates forecast vs current stock
-* Determines urgency level
-* Suggests reorder quantity
-* Prioritizes products based on risk
-* Generates human-readable explanations
+# 3. Agentic Decision Logic
 
-Example Output:
+The decision layer evaluates:
+* Forecasted demand
+* Stock depletion timeline
+* Demand volatility
+* Growth trends
+* Reorder thresholds
 
-> “Product A is projected to experience a 12% demand increase. Current stock will deplete within 6 days. Recommended reorder quantity: 320 units. Priority: High.”
-
-5. Risk Classification System
-Products are categorized as:
+Each SKU is classified into:
 * Safe
 * Warning
 * Critical
 
-Based on depletion time and forecast variance.
-6. What-if Stimulation engine
+A dynamic priority score is computed to rank products by urgency.
 
-Allows users to simulate:
+# 4. Warehouse Ranking Engine
+
+Instead of analyzing a single product, the system:
+
+* Iterates across all SKUs
+* Computes forecast + optimization metrics
+* Assigns risk levels
+* Sorts by priority score
+* Outputs top critical products
+
+This simulates a real operations dashboard backend.
+
+# 5. What-If Simulation Engine
+
+Supports scenario modeling:
+
 * Demand increase/decrease %
 * Lead time delays
-* Supply chain disruption
-* Sudden demand spikes
+* Demand spikes
+* Supply disruption simulation
 
-The agent recalculates stock strategy dynamically.
+The system recalculates forecasts and optimization metrics dynamically.
 
-SYSTEM ARCHITECTURE:
-User Input
-     ↓
-Data Loader (Compressed Parser)
-     ↓
-Preprocessing Layer
-     ↓
-Demand Forecast Module
-     ↓
+# Example Output
+WAREHOUSE PRIORITY REPORT
+
+{'product_id': 'P039', 'priority_score': 86.1, 'risk_level': 'CRITICAL', 'depletion_days': 2.85, 'recommended_order_qty': 1857}
+{'product_id': 'P038', 'priority_score': 85.07, 'risk_level': 'CRITICAL', 'depletion_days': 1.86, 'recommended_order_qty': 1630}
+
+A full ranked report is automatically exported to:
+warehouse_priority_report.csv
+
+# System Architecture
+
+User Input (CLI arguments)
+↓
+Data Loader
+↓
+Forecasting Module
+↓
 Optimization Engine
-     ↓
+↓
 Agent Decision Layer
-     ↓
-Recommendation Output
+↓
+Ranking & Report Generation
 
-TECHNOLOGY STACK:
 
-| Component                | Technology            |
-| ------------------------ | --------------------- |
-| Language                 | Python                |
-| Data Processing          | Pandas, NumPy         |
-| Forecasting              | Statistical Models    |
-| Optimization             | Mathematical Formulas |
-| UI                       | Streamlit             |
-| Optional Agent Framework | LangChain             |
-
-PROJECT STRUCTURE:
-warehouse-agent-optimizer/
+# Project Structure
+warehouse-agent/
 │
+├── main.py
 ├── data/
-│   └── sample_dataset.zip
-│
-├── docs/
-│   ├── architecture.md
-│   ├── forecasting.md
-│   ├── optimization.md
-│   └── agent_logic.md
-│
 ├── src/
 │   ├── data_loader.py
 │   ├── forecasting.py
@@ -122,72 +132,86 @@ warehouse-agent-optimizer/
 │   ├── agent.py
 │   └── simulation.py
 │
-├── app.py
+├── tests/
+│   ├── test_forecasting.py
+│   └── test_optimization.py
+│
 ├── requirements.txt
 └── README.md
 
-WORKFLOW:
-1. Upload compressed product dataset
-2. Select product or analyze entire warehouse
-3. Generate demand forecast
-4. Compute Reorder Point & EOQ
-5. Agent evaluates stock risk
-6. Receive recommendation
-7. Optionally simulate alternate scenarios
-
-EXAMPLE DATASET SCHEMA
-
-| Column             | Description                |
-| ------------------ | -------------------------- |
-| product_id         | Unique product identifier  |
-| current_stock      | Current inventory units    |
-| historical_demand  | Time-series demand data    |
-| lead_time          | Replenishment delay (days) |
-| ordering_cost      | Cost per order             |
-| holding_cost       | Storage cost per unit      |
-| warehouse_capacity | Maximum capacity           |
-
-PERFORMANCE OPTIMIZATION
-
-* Compressed dataset ingestion
-* Vectorized Pandas operations
-* Efficient numerical computation
-* Scalable modular architecture
-
-BUSINESS IMPACT
-
-This system can help:
-* Reduce stockout probability
-* Minimize holding costs
-* Improve replenishment timing
-* Prioritize high-risk SKUs
-* Support data-driven decision making
-
-Similar optimization principles are used in large-scale supply chain systems at companies such as Amazon and Walmart.
-
-FUTURE IMPROVEMENTS:-
-* ARIMA / LSTM forecasting
-* Multi-warehouse coordination
-* Reinforcement learning optimization
-* Real-time API integration
-* Cloud deployment
-* Live dashboard analytics
-
-HOW TO RUN
-
-bash
-git clone https://github.com/your-username/warehouse-agent-optimizer.git
-cd warehouse-agent-optimizer
+# Installation
+git clone https://github.com/your-username/warehouse-agent.git
+cd warehouse-agent
 pip install -r requirements.txt
-streamlit run app.py
+
+# Running the System
+
+Basic execution:
+python main.py
+
+With scenario simulation:
+python main.py --demand_increase 20 --lead_delay 3 --spike
+
+This will:
+
+* Analyze all products
+* Rank by priority
+* Print top critical SKUs
+* Export a full CSV report
+
+# Running tests
+
+python -m pytest
+
+Example output:
+3 passed in 0.11s
+
+Automated tests validate:
+* Forecasting logic
+* EOQ computation
+* Deterministic behavior
+
+---
+
+# Technology stack
+
+| Component       | Technology                    |
+| --------------- | ----------------------------- |
+| Language        | Python                        |
+| Data Processing | Pandas, NumPy                 |
+| Forecasting     | Statistical Models            |
+| Optimization    | Mathematical Inventory Models |
+| Testing         | Pytest                        |
+| Interface       | CLI-based                     |
+
+---
+
+# AI Usage Statement
+AI tools were used as a learning and development assistant during the project.
+
+All forecasting logic, inventory formulas, decision scoring, simulation logic, and ranking systems were implemented manually and validated through deterministic testing.
+
+The core decision engine does not depend on LLM-generated outputs.
 
 
-KEY LEARNINGS
-* Agent-based decision modeling
-* Inventory optimization theory
-* Demand forecasting fundamentals
-* Supply chain risk analysis
-* Applied AI system design
+# Business Impact
+This system enables:
 
-LICENSE:
-This project is built for educational and research purposes.
+* Reduced stockout probability
+* Lower holding costs
+* SKU prioritization
+* Scenario-based planning
+* Faster operational decisions
+
+The underlying principles align with supply chain optimization techniques used in large-scale retail and logistics operations.
+
+# Future Improvements
+* ARIMA or LSTM forecasting models
+* Multi-warehouse coordination
+* Real-time API ingestion
+* Web-based dashboard interface
+* Cloud deployment
+
+# License
+Built for educational and research purposes.
+
