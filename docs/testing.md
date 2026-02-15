@@ -3,7 +3,7 @@ Framework:
 pytest
 
 Tests Implemented:
-Forecasting Tests
+Forecasting Tests:
 Moving average correctness
 Volatility validation
 
